@@ -25,8 +25,8 @@ trans = transforms.Compose([
 
 with open("../data/vocab.pkl", 'rb') as f:
     vocab = pickle.load(f)
-dataloader = get_loader("../data/train2014/", "../data/annotations/captions_train2014.json",
-         vocab, trans,2, shuffle=True)
+dataloader = get_loader("../data/resized/", "../data/annotations/captions_train2014.json",
+         vocab, trans,128, shuffle=True)
 
 encoder = Encoder(256)
 decoder = Decoder(256,512, len(vocab),1)
@@ -56,7 +56,7 @@ if torch.cuda.is_available():
             
             if i%10 == 0:
                 print("Epoch {} step {}, Loss: {}, Perplexity: {}".format(epoch, i, loss.data[0], np.exp(loss.data[0])))
-            if (i+1)%100 == 0:
+            if (i+1)%1000 == 0:
                 torch.save(decoder.state_dict(), os.path.join("../output/",'decoder-{}-{}.pkl'.format(epoch, i+1)))
                 torch.save(encoder.state_dict(), os.path.join("../output/",'encoder-{}-{}.pkl'.format(epoch, i+1)))
                 
